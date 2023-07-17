@@ -1,0 +1,129 @@
+[gd_scene load_steps=15 format=3 uid="uid://bvlfyafarj6h0"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_xqsoh"]
+[ext_resource type="Shader" path="res://scripts/invert.gdshader" id="1_yunmj"]
+[ext_resource type="Texture2D" uid="uid://cc8vwkfi8wqjw" path="res://assets/player.svg" id="2_oohbw"]
+[ext_resource type="FontFile" uid="uid://0qn57hclbhpr" path="res://assets/fonts/arco/ARCO for OSX.otf" id="3_3r15c"]
+[ext_resource type="Script" path="res://addons/trail_2d/trail_2d.gd" id="3_bjpuq"]
+[ext_resource type="Texture2D" uid="uid://dr1b0s8wgu181" path="res://assets/background.tres" id="5_skq20"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6xhm6"]
+shader = ExtResource("1_yunmj")
+shader_parameter/invert = false
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c6gpg"]
+radius = 24.0
+
+[sub_resource type="Gradient" id="Gradient_joiq8"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_rearm"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_cown5"]
+max_value = 20.0
+_data = [Vector2(0, 20), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.0, 1.4, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_t6jl1"]
+curve = SubResource("Curve_cown5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_41wu8"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 64.0
+initial_velocity_max = 128.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+damping_min = 32.0
+damping_max = 40.0
+scale_curve = SubResource("CurveTexture_t6jl1")
+
+[sub_resource type="LabelSettings" id="LabelSettings_m2fl5"]
+font = ExtResource("3_3r15c")
+font_size = 32
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody2D"]
+z_index = 1
+material = SubResource("ShaderMaterial_6xhm6")
+collision_layer = 2
+script = ExtResource("1_xqsoh")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+z_index = 1
+use_parent_material = true
+position = Vector2(0, 64)
+texture = ExtResource("2_oohbw")
+offset = Vector2(0, -64)
+
+[node name="JumpsLeftLabelPosition" type="Marker2D" parent="Sprite"]
+position = Vector2(0, -112)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+z_index = 1
+shape = SubResource("CircleShape2D_c6gpg")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+visible = false
+target_position = Vector2(0, 40)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-0.5, -64, 1, 1)
+
+[node name="OutlineTrail" type="Line2D" parent="."]
+position = Vector2(0, 4)
+width = 44.0
+default_color = Color(0, 0, 0, 1)
+gradient = SubResource("Gradient_joiq8")
+script = ExtResource("3_bjpuq")
+length = 8
+
+[node name="FillTrail" type="Line2D" parent="."]
+position = Vector2(0, 4)
+width = 32.0
+gradient = SubResource("Gradient_rearm")
+script = ExtResource("3_bjpuq")
+length = 8
+
+[node name="JumpParticles" type="GPUParticles2D" parent="."]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_41wu8")
+lifetime = 0.25
+one_shot = true
+
+[node name="JumpsLeftLabel" type="Label" parent="."]
+offset_left = -32.0
+offset_top = -80.0
+offset_right = 32.0
+offset_bottom = -16.0
+size_flags_horizontal = 4
+text = "0"
+label_settings = SubResource("LabelSettings_m2fl5")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="JumpBufferTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="Background" type="TextureRect" parent="CanvasLayer"]
+modulate = Color(0.12549, 0.54902, 0.698039, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_skq20")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

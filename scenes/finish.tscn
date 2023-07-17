@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://262wi2jlfm3f"]
+
+[ext_resource type="Script" path="res://scripts/finish.gd" id="1_lsj27"]
+[ext_resource type="Texture2D" uid="uid://c2ox7g71nhm8d" path="res://assets/finish.svg" id="2_o44db"]
+
+[node name="Finish" type="Area2D"]
+modulate = Color(1, 0, 0, 1)
+collision_mask = 2
+script = ExtResource("1_lsj27")
+level_dir = "res://scenes/levels"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_o44db")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(0, -60, 48, 0, 0, 60, -48, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

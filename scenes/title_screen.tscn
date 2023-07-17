@@ -1,0 +1,107 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsm74egmrmqle"]
+
+[ext_resource type="Theme" uid="uid://bk2dn8cfa8scf" path="res://assets/ui/theme.tres" id="1_6mwlc"]
+[ext_resource type="Script" path="res://scripts/title_screen.gd" id="2_bcvwp"]
+[ext_resource type="Texture2D" uid="uid://dr1b0s8wgu181" path="res://assets/background.tres" id="3_8tuv5"]
+[ext_resource type="FontFile" uid="uid://0qn57hclbhpr" path="res://assets/fonts/arco/ARCO for OSX.otf" id="3_g31ju"]
+[ext_resource type="Texture2D" uid="uid://p0ym3rrtbaln" path="res://assets/ui/player_portrait.png" id="4_h30qm"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_j1qgr"]
+font = ExtResource("3_g31ju")
+font_size = 96
+outline_size = 32
+outline_color = Color(0, 0, 0, 1)
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_6mwlc")
+script = ExtResource("2_bcvwp")
+
+[node name="Background" type="TextureRect" parent="."]
+modulate = Color(0.12549, 0.54902, 0.698039, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_8tuv5")
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 128
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Project:
+Platformer"
+label_settings = SubResource("LabelSettings_j1qgr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(384, 128)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(256, 104)
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Play"
+
+[node name="SettingsButton" type="Button" parent="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(256, 104)
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(256, 104)
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Quit"
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_h30qm")
+flip_h = true
+
+[connection signal="pressed" from="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
